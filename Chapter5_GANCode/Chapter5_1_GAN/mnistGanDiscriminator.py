@@ -1,3 +1,4 @@
+from distutils.command.build import build
 from tensorflow.keras.layers import Activation, Dense, Input, LeakyReLU, Flatten
 from tensorflow.keras.models import Model, Sequential
 
@@ -12,3 +13,11 @@ def build_discriminator(img_shape):
         # Fake oder reales Bild wären eigentlich 2 Outputs, 
         # aber mit Sigmoid wird eine Wahrscheinlichkeit für z.B. Real ausgegeben
     model.add(Activation("sigmoid"))
+    model.summary()
+    img = Input(shape=img_shape)
+    d_pred = model(img)
+    return Model(inputs=img, outputs=d_pred)
+
+if __name__ == "__main__":
+    img_shape = (28, 28, 1)
+    model = build_discriminator(img_shape=img_shape)

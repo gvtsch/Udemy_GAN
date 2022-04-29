@@ -1,0 +1,17 @@
+# Libraries
+scikit-learn
+scipy
+scikit-image
+numpy==1.19.*
+matplotlib
+pandas
+opencv-python
+
+# Linting/Tooling
+pylint
+flake8
+mypy
+isort
+black
+pre-commit
+autopep8

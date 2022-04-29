@@ -7,13 +7,13 @@ from tensorflow.keras.models import Model
 from tensorflow.keras.optimizers import Adam
 
 from mnistData import MNIST
-from mnistGanDiscriminator import build_discriminator
-from mnistGanGenerator import build_generator
+from mnistDCGanDiscriminator import build_discriminator
+from mnistDCGanGenerator import build_generator
 
 PATH = os.path.abspath("C:/Selbststudium/Udemy/Udemy_GAN")
-IMAGES_PATH = os.path.join(PATH, "Chapter5_GANCode/Chapter5_1_GAN/images")
+IMAGES_PATH = os.path.join(PATH, "Chapter5_GANCode/Chapter5_2_1_DCGAN_MNIST/images")
 
-class GAN:
+class DCGAN:
     def __init__(self):
         # Model parameters
         self.img_rows=28
@@ -22,8 +22,7 @@ class GAN:
         self.img_shape=(self.img_rows, self.img_cols, self.img_depth)
         self.z_dimension=100
         optimizer=Adam(
-            learning_rate=0.0002,
-            beta_1=0.5)
+            learning_rate=0.0001)
         # Discriminator
         self.discriminator=build_discriminator(img_shape=self.img_shape)
         self.discriminator.compile(
@@ -99,8 +98,8 @@ class GAN:
         plt.close()
 
 if __name__ == "__main__":
-    gan = GAN()
-    gan.train(
+    dcgan = DCGAN()
+    dcgan.train(
         epochs=250_000,
         batch_size=32,
         sample_interval=1_000)

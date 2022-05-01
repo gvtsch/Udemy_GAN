@@ -1,23 +1,25 @@
 from distutils.command.build import build
-from tensorflow.keras.layers import Activation, Dense, Input, LeakyReLU, Flatten
-from tensorflow.keras.models import Model, Sequential
+from tensorflow.keras.layers import Activation, Dense, Input, LeakyReLU, Flatten, Concatenate, Dropout
+from tensorflow.keras.models import Model
 
-def build_discriminator(img_shape):
-    model = Sequential()
-    model.add(Flatten(input_shape=img_shape)) # (28, 28, 1) -> (784) 
-    model.add(Dense(512))
-    model.add(LeakyReLU(alpha=0.2)) # Alpha bestimmt die Steigung im negativen Bereich
-    model.add(Dense(256))
-    model.add(LeakyReLU(alpha=0.2))
-    model.add(Dense(1)) 
-        # Fake oder reales Bild wären eigentlich 2 Outputs, 
-        # aber mit Sigmoid wird eine Wahrscheinlichkeit für z.B. Real ausgegeben
-    model.add(Activation("sigmoid"))
+def build_discriminator(img_shape, num_classes):
+    img = Input(shape=(img_shape))
+    label = Input(shape=(num_classes,))
+    img_flatten = Flatten()(img)
+    x = Concatenate()([img_flatten, label])
+    x = Dense(512)(x)
+    x = LeakyReLU(alpha=0.2)(x)
+    x = Dropout(rate=0.25)(x)
+    x = Dense(512)(x)
+    x = LeakyReLU(alpha=0.2)(x)
+    x = Dropout(rate=0.25)(x)
+    x = Dense(units=1)(x)
+    d_pred = Activation("sigmoid")(x)
+    model = Model(inputs=[img, label], outputs=d_pred)
     model.summary()
-    img = Input(shape=img_shape)
-    d_pred = model(img)
-    return Model(inputs=img, outputs=d_pred)
+    return model
 
 if __name__ == "__main__":
     img_shape = (28, 28, 1)
-    model = build_discriminator(img_shape=img_shape)
+    num_classes = 10
+    model = build_discriminator(img_shape=img_shape, num_classes=num_classes)

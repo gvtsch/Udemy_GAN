@@ -8,7 +8,7 @@ import tensorflow as tf
 from mnistData import MNIST
 
 
-PATH = os.path.abspath("C:/Users/Jan/Dropbox/_Coding/UdemyGAN")
+PATH = os.path.abspath("C:/Selbststudium/Udemy/Udemy_GAN")
 IMAGES_PATH = os.path.join(PATH, "Chapter7_Autoencoder/images")
 
 data = MNIST()

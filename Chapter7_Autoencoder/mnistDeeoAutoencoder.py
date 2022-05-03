@@ -19,10 +19,18 @@ def build_autoencoder():
     input_img = Input(shape=(img_shape))
     input_img_flatten = Flatten()(input_img)
     # Encoder
-    encoded = Dense(units=encoding_dim)(input_img_flatten)
+    encoded = Dense(units=256)(input_img_flatten)
+    encoded = Activation("relu")(encoded)
+    encoded = Dense(units=128)(encoded)
+    encoded = Activation("relu")(encoded)
+    encoded = Dense(units=encoding_dim)(encoded)
     encoded = Activation("relu")(encoded)
     # Decoder 
-    decoded = Dense(units=np.prod(img_shape))(encoded)
+    decoded = Dense(128)(encoded)
+    decoded = Activation("relu")(decoded)
+    decoded = Dense(256)(decoded)
+    decoded = Activation("relu")(decoded)
+    decoded = Dense(np.prod(img_shape))(decoded)
     decoded = Activation("sigmoid")(decoded)
     # Output
     output_img = Reshape(target_shape=img_shape)(decoded)
@@ -55,7 +63,7 @@ def plot_imgs(test_imgs, decoded_imgs):
         plt.imshow(test_imgs[i].reshape(28, 28), cmap="gray")
         ax = plt.subplot(2, 10, i+1+10)
         plt.imshow(decoded_imgs[i].reshape(28, 28), cmap="gray")
-    plt.savefig(os.path.join(IMAGES_PATH, "autoencoder.png"))
+    plt.savefig(os.path.join(IMAGES_PATH, "deepautoencoder.png"))
 
 if __name__ == "__main__":
     model = build_autoencoder()
